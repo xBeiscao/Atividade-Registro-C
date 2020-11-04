@@ -1,0 +1,162 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_SERVICO 3
+#define MAX_TIPOSERVICO 4
+
+typedef struct {
+  int codigoTipoServico;
+  int numdeServico;
+  float valorServico;
+  int codigoServico;
+  int codCliente;
+  int dia;
+  int ativo;
+}Servico;
+Servico servico[MAX_SERVICO];
+
+typedef struct {
+int codigoTipoServico;
+char descricaoTipoServico[50];
+int ativo;
+}TipoServico;
+TipoServico tipoServico[MAX_TIPOSERVICO];
+int lista_tipos_servicos_count;
+
+
+
+void menu();
+void cadastrarTiposServicos();
+void cadastrarServicosPrestados();
+void pesquisarServicoDia();
+
+
+int main(int argc, char const *argv[]) {
+  menu();
+}
+
+void menu(){
+   int opc;
+  do {
+  system("clear");
+  printf("\n1- Cadastrar os tipos de serviços\n2- Cadastrar os Serviços Prestados");
+  printf("\n3- Mostrar serviços em um deterimnado dia\n0 - Sair\n");
+  scanf("%d", &opc);
+ 
+
+switch(opc){
+  case 1:
+    cadastrarTiposServicos();
+  break;
+  case 2:
+    cadastrarServicosPrestados();
+  break;
+  case 3:
+    pesquisarServicoDia();
+  break;
+  case 0:
+    printf("Fim do programa.");
+  break;
+}
+getchar();
+} while(opc != 0);
+}
+
+void cadastrarTiposServicos(){
+  
+  int next_index;
+
+  next_index = lista_tipos_servicos_count + 1;
+
+  if (next_index > 4) {
+    printf("Limite de itens inserido excedido.");
+  }
+  else {
+    printf("Quanto ta o next index >>>>>>>> %d\n", next_index);
+    printf("Código para o serviço: \n");
+    scanf("%d", &tipoServico[next_index].codigoTipoServico);
+    getchar();
+    printf("Descrição do Serviço: \n");
+    fgets(tipoServico[next_index].descricaoTipoServico, sizeof(tipoServico[next_index].descricaoTipoServico), stdin);
+    printf("Serviço registrado com sucesso.");
+
+    lista_tipos_servicos_count = next_index;
+  }
+
+}
+
+
+void cadastrarServicosPrestados(){
+  int temp_int;
+  int temp_dia;
+  int temp_contador_servico;
+
+  temp_contador_servico = 1;
+
+  printf("Digite o dia do mês\n");
+  scanf("%d", &temp_dia);
+
+  
+
+  while (temp_contador_servico < 4) {
+    printf("\n");
+
+    printf("Tipo de Serviço:");
+    scanf("%d", &temp_int);
+    
+    temp_int = tipoServico[temp_int].codigoTipoServico;
+
+    if (temp_int == -1) {
+      printf("Código não encontrado.\n");
+    }
+    else {
+      servico[temp_contador_servico].codigoServico = temp_contador_servico;
+      servico[temp_contador_servico].dia = temp_dia;
+      servico[temp_contador_servico].codigoTipoServico = temp_int;
+
+      printf("Código do cliente: \n");
+      scanf("%d", &servico[temp_contador_servico].codCliente);
+
+      printf("Valor do Serviço: \n");
+      scanf("%f", &servico[temp_contador_servico].valorServico);
+      printf("item inserido com sucesso.");
+    }
+    temp_contador_servico = temp_contador_servico + 1;
+  }
+
+  lista_tipos_servicos_count = lista_tipos_servicos_count + 1;
+}
+
+
+void pesquisarServicoDia(){
+
+  int dia;
+   int opc;
+   do {
+     system("clear");
+     printf("\nDigite o dia do servico para pesquisar: ");
+     scanf("%d", &dia);
+
+   for (int i = 0; i< 4; i++){
+     if (servico[i].dia == dia) {
+
+       printf("Serviços do dia: %d\n", dia);
+     printf("--------------------------------\n");
+      printf("Codigo do Serviço: %d\n", servico[i].codigoServico);
+      printf("Valor do Serviço: %0.2f\n", servico[i].valorServico);
+      printf("Tipo de Servico: %d\n", tipoServico[i].codigoTipoServico);
+      printf("Descrição do tipo do Servico: %s\n", tipoServico[i].descricaoTipoServico);
+      printf("Codigo do Cliente:%d\n", servico[i].codCliente);
+      printf("-------------------------------------\n");
+    
+     
+
+     }
+   }
+    printf("\nDigite 0 para sair ou 1 para nova pesquisa: ");
+    scanf("%d", &opc);
+    getchar();
+   }while(opc !=0);
+ }
+
+
